@@ -1,6 +1,7 @@
 import tkinter as tk
 import sys
 import os
+import json
 from collections import deque
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -50,12 +51,30 @@ def add_node():
     )
     panel_text.config(text=f"Created: {new_id}\nEdit JSON to connect it.")
 
+def save_json():
+    data = {
+        "title": tree.title,
+        "start_node_id": tree.start_node_id,
+        "nodes": [node.to_dict() for node in tree.nodes.values()]
+    }
+    with open("data/example_dialogue.json", "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
+    panel_text.config(text="Saved successfully!")
+
 tk.Button(
     panel,
     text="+ Add Node",
     font=("Arial", 10),
     bg="#d4e8d4",
     command=add_node
+).pack(pady=10)
+
+tk.Button(
+    panel,
+    text="💾 Save JSON",
+    font=("Arial", 10),
+    bg="#d4e8d4",
+    command=save_json
 ).pack(pady=10)
 
 # BFS — уровни узлов
@@ -107,7 +126,6 @@ for node_id, node in tree.nodes.items():
         fill="darkred"
     )
 
-    # FIX: правильный уровень разделителя
     canvas.create_line(
         x1+10, y1+35,
         x2-10, y1+35,
