@@ -53,7 +53,17 @@ for node_id, node in tree.nodes.items():
     x2, y2 = x1 + NODE_WIDTH, y1 + NODE_HEIGHT
 
     canvas.create_rectangle(x1, y1, x2, y2, outline="black", fill="white", width=2)
-    canvas.create_text((x1+x2)/2, (y1+y2)/2, text=node.text, width=220, anchor="center")
+    
+    # Имя персонажа сверху
+    canvas.create_text((x1+x2)/2, y1+20, text=node.speaker,
+                      font=("Arial", 9, "bold"), fill="darkred")
+    
+    # Разделитель
+    canvas.create_line(x1+10, y1+35, x2-10, y1+35, fill="gray")
+    
+    # Текст реплики снизу
+    canvas.create_text((x1+x2)/2, y1+65, text=node.text,
+                      width=220, font=("Arial", 8), fill="black")
 
     node_positions[node_id] = {"x1": x1, "y1": y1, "x2": x2, "y2": y2}
 
