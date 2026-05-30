@@ -22,4 +22,4 @@ In active development — started May 2026
 
 ## Author
 
-Khasan | Software Engineering student at SKKU, South Korea
+MISHA | Software Engineering student at SKKU, South Korea
