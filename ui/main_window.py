@@ -4,7 +4,7 @@ import os
 from collections import deque
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from core.dialogue_tree import load_dialogue_from_json
+from core.dialogue_tree import load_dialogue_from_json, DialogueNode
 
 # Константы
 CANVAS_WIDTH, CANVAS_HEIGHT = 1080, 780
@@ -41,6 +41,23 @@ panel_text.pack(pady=10)
 # Загрузка данных
 tree = load_dialogue_from_json("data/example_dialogue.json")
 
+def add_node():
+    new_id = f"node_{len(tree.nodes)+1:03d}"
+    tree.nodes[new_id] = DialogueNode(
+        node_id=new_id,
+        speaker="New Speaker",
+        text="New dialogue text"
+    )
+    panel_text.config(text=f"Created: {new_id}\nEdit JSON to connect it.")
+
+tk.Button(
+    panel,
+    text="+ Add Node",
+    font=("Arial", 10),
+    bg="#d4e8d4",
+    command=add_node
+).pack(pady=10)
+
 # BFS — уровни узлов
 queue = deque([tree.start_node_id])
 levels = {tree.start_node_id: 0}
@@ -58,10 +75,10 @@ nodes_per_level = {}
 for node_id, level in levels.items():
     nodes_per_level.setdefault(level, []).append(node_id)
 
-# Храним позиции узлов
+# Позиции узлов
 node_positions = {}
 
-# Рисуем узлы
+# Рисование узлов
 for node_id, node in tree.nodes.items():
     level = levels[node_id]
     siblings = nodes_per_level[level]
@@ -83,17 +100,31 @@ for node_id, node in tree.nodes.items():
     if node_id == tree.start_node_id:
         canvas.create_rectangle(x1-4, y1-4, x2+4, y2+4, outline="gold", width=3)
 
-    canvas.create_text((x1+x2)/2, y1+20, text=node.speaker,
-                       font=("Arial", 9, "bold"), fill="darkred")
+    canvas.create_text(
+        (x1+x2)/2, y1+20,
+        text=node.speaker,
+        font=("Arial", 9, "bold"),
+        fill="darkred"
+    )
 
-    canvas.create_line(x1+10, y1+35, x2-10, y1+35, fill="gray")
+    # FIX: правильный уровень разделителя
+    canvas.create_line(
+        x1+10, y1+35,
+        x2-10, y1+35,
+        fill="gray"
+    )
 
-    canvas.create_text((x1+x2)/2, y1+65, text=node.text,
-                       width=220, font=("Arial", 8), fill="black")
+    canvas.create_text(
+        (x1+x2)/2, y1+65,
+        text=node.text,
+        width=220,
+        font=("Arial", 8),
+        fill="black"
+    )
 
     node_positions[node_id] = {"x1": x1, "y1": y1, "x2": x2, "y2": y2}
 
-# Функция выбора узла
+# Клик по узлу
 def on_click(event):
     for node_id, pos in node_positions.items():
         if pos["x1"] <= event.x <= pos["x2"] and pos["y1"] <= event.y <= pos["y2"]:
@@ -105,7 +136,7 @@ def on_click(event):
 
 canvas.bind("<Button-1>", on_click)
 
-# Рисуем связи
+# Связи
 for node_id, node in tree.nodes.items():
     for choice in node.choices:
         s = node_positions[node_id]
@@ -115,7 +146,13 @@ for node_id, node in tree.nodes.items():
         ex, ey = (e["x1"]+e["x2"])/2, e["y1"]
 
         canvas.create_line(sx, sy, ex, ey, arrow=tk.LAST, width=2)
-        canvas.create_text((sx+ex)/2, (sy+ey)/2, text=choice["text"],
-                            width=150, fill="darkblue", font=("Arial", 8))
+        canvas.create_text(
+            (sx+ex)/2,
+            (sy+ey)/2,
+            text=choice["text"],
+            width=150,
+            fill="darkblue",
+            font=("Arial", 8)
+        )
 
 window.mainloop()
