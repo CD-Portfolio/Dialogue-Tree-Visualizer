@@ -20,6 +20,8 @@ my_canvas.pack()
 
 tree = load_dialogue_from_json("data/example_dialogue.json")
 
+node_positions = {}
+
 for i, (node_id, node) in enumerate(tree.nodes.items()):
 
     offset_x = i * 300
@@ -44,5 +46,23 @@ for i, (node_id, node) in enumerate(tree.nodes.items()):
         width=220,
         anchor="center"
     )
+
+    node_positions[node_id] = (text_x, text_y)
+
+for node_id, node in tree.nodes.items():
+    for choice in node.choices:
+
+        start_x, start_y = node_positions[node_id]
+
+        end_x, end_y = node_positions[choice["next_node_id"]]
+
+        my_canvas.create_line(
+            start_x,
+            start_y,
+            end_x,
+            end_y,
+            arrow=tk.LAST,
+            width=2
+        )
 
 window.mainloop()
