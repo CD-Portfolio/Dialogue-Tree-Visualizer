@@ -22,16 +22,19 @@ tree = load_dialogue_from_json("data/example_dialogue.json")
 
 node_positions = {}
 
+# Рисуем узлы
 for i, (node_id, node) in enumerate(tree.nodes.items()):
 
-    offset_x = i * 300
+    offset_y = i * 180
 
-    x1, y1 = 50 + offset_x, 50
-    x2, y2 = 300 + offset_x, 150
+    x1, y1 = 50, 50 + offset_y
+    x2, y2 = 300, 150 + offset_y
 
     my_canvas.create_rectangle(
-        x1, y1,
-        x2, y2,
+        x1,
+        y1,
+        x2,
+        y2,
         outline="black",
         fill="white"
     )
@@ -47,14 +50,29 @@ for i, (node_id, node) in enumerate(tree.nodes.items()):
         anchor="center"
     )
 
-    node_positions[node_id] = (text_x, text_y)
+    node_positions[node_id] = {
+        "x1": x1,
+        "y1": y1,
+        "x2": x2,
+        "y2": y2,
+        "center_x": text_x,
+        "center_y": text_y
+    }
 
+# Рисуем связи
 for node_id, node in tree.nodes.items():
     for choice in node.choices:
 
-        start_x, start_y = node_positions[node_id]
+        start_node = node_positions[node_id]
+        end_node = node_positions[choice["next_node_id"]]
 
-        end_x, end_y = node_positions[choice["next_node_id"]]
+        # нижний центр первого узла
+        start_x = (start_node["x1"] + start_node["x2"]) / 2
+        start_y = start_node["y2"]
+
+        # верхний центр второго узла
+        end_x = (end_node["x1"] + end_node["x2"]) / 2
+        end_y = end_node["y1"]
 
         my_canvas.create_line(
             start_x,
