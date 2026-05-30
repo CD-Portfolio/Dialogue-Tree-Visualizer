@@ -1,1 +1,38 @@
-
+{
+    "title": "The Witcher - Tavern Meeting",
+    "start_node_id": "node_001",
+    "nodes": [
+        {
+            "node_id": "node_001",
+            "speaker": "Geralt",
+            "text": "What do you want from me?",
+            "choices": [
+                {
+                    "text": "I need your help with a contract.",
+                    "next_node_id": "node_002"
+                },
+                {
+                    "text": "Nothing. Just passing through.",
+                    "next_node_id": "node_003"
+                }
+            ]
+        },
+        {
+            "node_id": "node_002",
+            "speaker": "Villager",
+            "text": "There is a monster terrorizing our village. Please, witcher, we need you.",
+            "choices": [
+                {
+                    "text": "Tell me more about this monster.",
+                    "next_node_id": "node_003"
+                }
+            ]
+        },
+        {
+            "node_id": "node_003",
+            "speaker": "Geralt",
+            "text": "Hmm. I'll think about it.",
+            "choices": []
+        }
+    ]
+}
