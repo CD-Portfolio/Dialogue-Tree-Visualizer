@@ -10,6 +10,10 @@ from core.dialogue_tree import load_dialogue_from_json
 CANVAS_WIDTH, CANVAS_HEIGHT = 1380, 780
 NODE_WIDTH, NODE_HEIGHT = 250, 100
 LEVEL_SPACING = 180
+SPEAKER_COLORS = {
+    "Geralt": "#d4e8d4",
+    "Villager": "#e8d4d4",
+}
 
 # Окно
 window = tk.Tk()
@@ -52,7 +56,10 @@ for node_id, node in tree.nodes.items():
     y1 = 50 + level * LEVEL_SPACING
     x2, y2 = x1 + NODE_WIDTH, y1 + NODE_HEIGHT
 
-    canvas.create_rectangle(x1, y1, x2, y2, outline="black", fill="white", width=2)
+    canvas.create_rectangle(x1, y1, x2, y2, outline="black",fill=SPEAKER_COLORS.get(node.speaker, "#f0f0f0"), width=2)
+
+    if node_id == tree.start_node_id:
+        canvas.create_rectangle(x1-4, y1-4, x2+4, y2+4, outline="gold", width=3)
     
     # Имя персонажа сверху
     canvas.create_text((x1+x2)/2, y1+20, text=node.speaker,
