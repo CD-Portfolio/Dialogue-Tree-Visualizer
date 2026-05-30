@@ -2,6 +2,7 @@ import json
 from core.dialogue_tree import DialogueNode, DialogueTree
 
 
+
 def load_dialogue_from_json(filepath: str) -> DialogueTree:
     """Load a dialogue tree from a JSON file."""
     with open(filepath, "r", encoding="utf-8") as f:
