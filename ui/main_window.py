@@ -36,11 +36,21 @@ panel.pack(side=tk.RIGHT, fill=tk.Y)
 panel_title = tk.Label(panel, text="Node Details", font=("Arial", 12, "bold"), bg="white")
 panel_title.pack(pady=10)
 
-panel_text = tk.Label(panel, text="", justify="left", bg="white", wraplength=280)
-panel_text.pack(pady=10)
+tk.Label(panel, text="Speaker:", bg="white", font=("Arial", 9, "bold")).pack(pady=(10, 0))
+speaker_entry = tk.Entry(panel, width=30)
+speaker_entry.pack(pady=5)
+
+tk.Label(panel, text="Text:", bg="white", font=("Arial", 9, "bold")).pack()
+text_entry = tk.Text(panel, width=30, height=6)
+text_entry.pack(pady=5)
+
+panel_text = tk.Label(panel, text="Click a node to edit", bg="white", wraplength=280)
+panel_text.pack(pady=5)
 
 # Загрузка данных
 tree = load_dialogue_from_json("data/example_dialogue.json")
+
+selected_node_id = None
 
 def add_node():
     new_id = f"node_{len(tree.nodes)+1:03d}"
@@ -49,7 +59,7 @@ def add_node():
         speaker="New Speaker",
         text="New dialogue text"
     )
-    panel_text.config(text=f"Created: {new_id}\nEdit JSON to connect it.")
+    panel_text.config(text=f"Created: {new_id}")
 
 def save_json():
     data = {
@@ -60,6 +70,16 @@ def save_json():
     with open("data/example_dialogue.json", "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
     panel_text.config(text="Saved successfully!")
+
+def save_node():
+    if not selected_node_id:
+        panel_text.config(text="No node selected!")
+        return
+
+    node = tree.nodes[selected_node_id]
+    node.speaker = speaker_entry.get()
+    node.text = text_entry.get("1.0", tk.END).strip()
+    panel_text.config(text=f"Node {selected_node_id} updated!")
 
 tk.Button(
     panel,
@@ -76,6 +96,14 @@ tk.Button(
     bg="#d4e8d4",
     command=save_json
 ).pack(pady=10)
+
+tk.Button(
+    panel,
+    text="✏️ Save Node",
+    font=("Arial", 10),
+    bg="#d4d4e8",
+    command=save_node
+).pack(pady=5)
 
 # BFS — уровни узлов
 queue = deque([tree.start_node_id])
@@ -144,12 +172,16 @@ for node_id, node in tree.nodes.items():
 
 # Клик по узлу
 def on_click(event):
+    global selected_node_id
     for node_id, pos in node_positions.items():
         if pos["x1"] <= event.x <= pos["x2"] and pos["y1"] <= event.y <= pos["y2"]:
+            selected_node_id = node_id
             node = tree.nodes[node_id]
-            panel_text.config(
-                text=f"ID: {node_id}\nSpeaker: {node.speaker}\n\nText:\n{node.text}"
-            )
+            speaker_entry.delete(0, tk.END)
+            speaker_entry.insert(0, node.speaker)
+            text_entry.delete("1.0", tk.END)
+            text_entry.insert("1.0", node.text)
+            panel_text.config(text=f"Editing: {node_id}")
             return
 
 canvas.bind("<Button-1>", on_click)
