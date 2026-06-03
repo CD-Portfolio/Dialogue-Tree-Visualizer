@@ -33,18 +33,6 @@
             "speaker": "Geralt",
             "text": "Hmm. I'll think about it.",
             "choices": []
-        },
-        {
-            "node_id": "node_004",
-            "speaker": "New Speaker",
-            "text": "New dialogue text",
-            "choices": []
-        },
-        {
-            "node_id": "node_005",
-            "speaker": "New Speaker",
-            "text": "New dialogue text",
-            "choices": []
         }
     ]
 }
