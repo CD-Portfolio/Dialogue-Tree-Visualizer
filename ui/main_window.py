@@ -1,7 +1,16 @@
 import tkinter as tk
 from tkinter import ttk, filedialog
-import json, os
+import json, os, sys
 from collections import deque
+
+# Resolve base directory — works both for plain .py and PyInstaller --onefile
+if getattr(sys, "frozen", False):
+    BASE_DIR = os.path.dirname(sys.executable)
+else:
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+def _path(rel):
+    return os.path.join(BASE_DIR, rel)
 
 # ── PALETTE ───────────────────────────────────────────────────────────────────
 C = {
@@ -27,7 +36,7 @@ CANVAS_W, CANVAS_H   = 1060, 760
 NODE_W,   NODE_H     = 200, 108
 LEVEL_GAP            = 190
 ZOOM_MIN, ZOOM_MAX, ZOOM_STEP = 0.15, 3.0, 1.12
-DATA_FILE = "data/example_dialogue.json"
+DATA_FILE = _path("data/demo_dialogue.json")
 
 MONO    = ("Consolas", 9)
 MONO_SM = ("Consolas", 8)
@@ -274,7 +283,7 @@ panel_status.pack(side=tk.LEFT, fill=tk.X, padx=(0,8), pady=6)
 _sep()
 
 # ── DATA ──────────────────────────────────────────────────────────────────────
-os.makedirs("data", exist_ok=True)
+os.makedirs(_path("data"), exist_ok=True)
 tree = load_from_json(DATA_FILE)
 if not tree.nodes:
     tree = _default_tree()
