@@ -1,37 +1,212 @@
 {
-    "title": "The Witcher - Tavern Meeting",
-    "start_node_id": "node_001",
+    "title": "The Witcher — Contract in Novigrad",
+    "start_node_id": "node_start",
+    "positions": {
+        "node_start":   {"x1": 440, "y1": 40,  "x2": 640, "y2": 148},
+        "node_greet_a": {"x1": 160, "y1": 230, "x2": 360, "y2": 338},
+        "node_greet_b": {"x1": 480, "y1": 230, "x2": 680, "y2": 338},
+        "node_greet_c": {"x1": 800, "y1": 230, "x2": 1000,"y2": 338},
+
+        "node_contract":{"x1": 80,  "y1": 430, "x2": 280, "y2": 538},
+        "node_haggle":  {"x1": 310, "y1": 430, "x2": 510, "y2": 538},
+        "node_refuse":  {"x1": 800, "y1": 430, "x2": 1000,"y2": 538},
+
+        "node_price_ok":{"x1": 80,  "y1": 630, "x2": 280, "y2": 738},
+        "node_price_low":{"x1":310, "y1": 630, "x2": 510, "y2": 738},
+        "node_angry":   {"x1": 540, "y1": 630, "x2": 740, "y2": 738},
+
+        "node_investigate":{"x1":80,"y1": 830, "x2": 280, "y2": 938},
+        "node_clue_a":  {"x1": 310, "y1": 830, "x2": 510, "y2": 938},
+        "node_clue_b":  {"x1": 540, "y1": 830, "x2": 740, "y2": 938},
+        "node_dead_end_refuse": {"x1":800,"y1":830,"x2":1000,"y2":938},
+
+        "node_cave":    {"x1": 80,  "y1":1030, "x2": 280, "y2":1138},
+        "node_tavern":  {"x1": 310, "y1":1030, "x2": 510, "y2":1138},
+
+        "node_boss":    {"x1": 160, "y1":1230, "x2": 360, "y2":1338},
+        "node_trap":    {"x1": 480, "y1":1230, "x2": 680, "y2":1338},
+
+        "node_victory": {"x1": 80,  "y1":1430, "x2": 280, "y2":1538},
+        "node_dead_end_trap":{"x1":480,"y1":1430,"x2":680,"y2":1538},
+        "node_loop_back":{"x1":800, "y1":1030, "x2":1000,"y2":1138}
+    },
     "nodes": [
         {
-            "node_id": "node_001",
-            "speaker": "Geralt",
-            "text": "What do you want from me? Maybe a task?",
-            "choices": [
-                {
-                    "text": "I need your help with a contract.",
-                    "next_node_id": "node_002"
-                },
-                {
-                    "text": "Nothing. Just passing through.",
-                    "next_node_id": "node_003"
-                }
-            ]
-        },
-        {
-            "node_id": "node_002",
+            "id": "node_start",
             "speaker": "Villager",
-            "text": "There is a monster terrorizing our village. Please, witcher, we need you.",
+            "text": "Witcher! Thank the gods. Our village is cursed — livestock disappearing, children hearing screams at night.",
             "choices": [
-                {
-                    "text": "Tell me more about this monster.",
-                    "next_node_id": "node_003"
-                }
+                {"text": "Tell me more",        "next_node_id": "node_greet_a"},
+                {"text": "What's the pay?",     "next_node_id": "node_greet_b"},
+                {"text": "Not my problem.",     "next_node_id": "node_greet_c"}
             ]
         },
         {
-            "node_id": "node_003",
+            "id": "node_greet_a",
             "speaker": "Geralt",
-            "text": "Hmm. I'll think about it.",
+            "text": "Start from the beginning. When did it start? Any strangers in the area?",
+            "choices": [
+                {"text": "Sounds like a contract", "next_node_id": "node_contract"},
+                {"text": "Ask about the cave",     "next_node_id": "node_clue_a"}
+            ]
+        },
+        {
+            "id": "node_greet_b",
+            "speaker": "Geralt",
+            "text": "I don't work for gratitude. Name a price first.",
+            "choices": [
+                {"text": "Negotiate",   "next_node_id": "node_haggle"},
+                {"text": "Accept deal", "next_node_id": "node_contract"}
+            ]
+        },
+        {
+            "id": "node_greet_c",
+            "speaker": "Villager",
+            "text": "Please, we've nobody else! The alderman offers everything he has…",
+            "choices": [
+                {"text": "Fine. One time.",  "next_node_id": "node_contract"},
+                {"text": "Walk away.",       "next_node_id": "node_refuse"}
+            ]
+        },
+        {
+            "id": "node_contract",
+            "speaker": "Geralt",
+            "text": "Alright. Two hundred orens up front, two hundred when it's done. I'll need a place to sleep.",
+            "choices": [
+                {"text": "Agreed.",          "next_node_id": "node_price_ok"},
+                {"text": "Too expensive!",   "next_node_id": "node_price_low"}
+            ]
+        },
+        {
+            "id": "node_haggle",
+            "speaker": "Villager",
+            "text": "We're poor folk, Witcher. Fifty orens and a hot meal — best we can offer.",
+            "choices": [
+                {"text": "I'll take it.",      "next_node_id": "node_price_ok"},
+                {"text": "Insult. Goodbye.",   "next_node_id": "node_angry"}
+            ]
+        },
+        {
+            "id": "node_refuse",
+            "speaker": "Geralt",
+            "text": "Not every monster is my problem. Good luck.",
+            "choices": []
+        },
+        {
+            "id": "node_price_ok",
+            "speaker": "Villager",
+            "text": "Bless you, Witcher. The inn at the crossroads — ask for Marta. She'll give you a room.",
+            "choices": [
+                {"text": "Ask about clues first", "next_node_id": "node_clue_a"},
+                {"text": "Head out immediately",  "next_node_id": "node_investigate"}
+            ]
+        },
+        {
+            "id": "node_price_low",
+            "speaker": "Geralt",
+            "text": "Two hundred minimum. That thing could be a bruxa, a striga, or worse.",
+            "choices": [
+                {"text": "We'll pay. We'll find a way.", "next_node_id": "node_price_ok"},
+                {"text": "Then forget it.",              "next_node_id": "node_angry"}
+            ]
+        },
+        {
+            "id": "node_angry",
+            "speaker": "Villager",
+            "text": "You're just like the rest! Only care about coin while we suffer!",
+            "choices": [
+                {"text": "Maybe you're right. I'll help.", "next_node_id": "node_contract"},
+                {"text": "Goodbye.",                       "next_node_id": "node_refuse"}
+            ]
+        },
+        {
+            "id": "node_clue_a",
+            "speaker": "Villager",
+            "text": "Old Henryk saw lights near the cave past the mill. Three nights running. Nobody goes there anymore.",
+            "choices": [
+                {"text": "The cave — I'll check it.",    "next_node_id": "node_cave"},
+                {"text": "Any other leads?",             "next_node_id": "node_clue_b"}
+            ]
+        },
+        {
+            "id": "node_clue_b",
+            "speaker": "Villager",
+            "text": "Traders from the south stopped at our tavern last week. Left in a hurry. Left behind a strange medallion.",
+            "choices": [
+                {"text": "Show me the medallion.",  "next_node_id": "node_tavern"},
+                {"text": "Back to the cave.",       "next_node_id": "node_cave"}
+            ]
+        },
+        {
+            "id": "node_investigate",
+            "speaker": "Geralt",
+            "text": "Tracks lead two ways — north toward the cave, east toward the old tavern ruins.",
+            "choices": [
+                {"text": "North — the cave.",  "next_node_id": "node_cave"},
+                {"text": "East — the tavern.", "next_node_id": "node_tavern"}
+            ]
+        },
+        {
+            "id": "node_dead_end_refuse",
+            "speaker": "Geralt",
+            "text": "No tracks. No clues. Whatever was here, it's gone. Contract void.",
+            "choices": []
+        },
+        {
+            "id": "node_cave",
+            "speaker": "Geralt",
+            "text": "Smells of rotting flesh. Claw marks on the walls — fresh. Something large lives here.",
+            "choices": [
+                {"text": "Press deeper.",       "next_node_id": "node_boss"},
+                {"text": "Set a trap first.",   "next_node_id": "node_trap"}
+            ]
+        },
+        {
+            "id": "node_tavern",
+            "speaker": "Geralt",
+            "text": "The medallion vibrates — nekker magic. Someone summoned these things deliberately. A mage, maybe.",
+            "choices": [
+                {"text": "Go back, check the cave.", "next_node_id": "node_cave"},
+                {"text": "Search for the mage.",     "next_node_id": "node_loop_back"}
+            ]
+        },
+        {
+            "id": "node_loop_back",
+            "speaker": "Geralt",
+            "text": "The trail goes cold. The mage covered his tracks well. Need more information from the village.",
+            "choices": [
+                {"text": "Return to the villager.", "next_node_id": "node_clue_b"}
+            ]
+        },
+        {
+            "id": "node_boss",
+            "speaker": "Geralt",
+            "text": "A troll. Old, scarred, chained by someone. It didn't come here on its own.",
+            "choices": [
+                {"text": "Kill it.",         "next_node_id": "node_victory"},
+                {"text": "Try to reason.",   "next_node_id": "node_victory"},
+                {"text": "Flee — regroup.",  "next_node_id": "node_trap"}
+            ]
+        },
+        {
+            "id": "node_trap",
+            "speaker": "Geralt",
+            "text": "The trap snaps shut — on nothing. Something smarter than a troll sprung it first.",
+            "choices": [
+                {"text": "Regroup at the village.", "next_node_id": "node_dead_end_trap"},
+                {"text": "Stay and wait it out.",   "next_node_id": "node_boss"}
+            ]
+        },
+        {
+            "id": "node_victory",
+            "speaker": "Geralt",
+            "text": "It's done. The creature won't trouble the village again. Someone put it there — that's a problem for another day.",
+            "choices": []
+        },
+        {
+            "id": "node_dead_end_trap",
+            "speaker": "Villager",
+            "text": "You barely made it back alive. Maybe… maybe this was a mistake. We can't pay you for nothing done.",
             "choices": []
         }
     ]
